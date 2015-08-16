@@ -5,7 +5,7 @@ node_modules = (
 )
 js = Bundle(
     'node_modules/jquery/dist/jquery.js',
-    'node_modules/page.js',
+    'node_modules/page/page.js',
     'node_modules/alertifyjs/build/alertify.js',
     'node_modules/bable-core/browser.js',
     'node_modules/react/dist/react.js',
@@ -18,7 +18,9 @@ js = Bundle(
     'js/ocfnet.js'
 )
 
-babel = Bundle()
+babel = Bundle(
+    'babel/user.js'
+)
 
 css = Bundle(
     'node_modules/alertifyjs/build/css/alertify.min.css',
