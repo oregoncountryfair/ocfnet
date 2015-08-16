@@ -4,6 +4,13 @@ from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
 
 from ocfnet.database import Model
+from ocfnet.media.models import *
+from ocfnet.user.models import *
+
+try:
+    from config import DATABASE_URL
+except:
+    from configdist import DATABASE_URL
 
 
 # this is the Alembic Config object, which provides
