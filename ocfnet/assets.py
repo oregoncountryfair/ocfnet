@@ -1,28 +1,31 @@
 from flask.ext.assets import Bundle
 
+node_modules = (
 
+)
 js = Bundle(
-    'lib/jquery.min.js',
-    'lib/page.js',
-    'lib/react/console-polyfill.js',
-    'lib/react/es5-sham.min.js',
-    'lib/react/es5-shim.min.js',
-    'lib/react/JSXTransformer.js',
-    'lib/react/react.js',
-    'lib/bootstrap/js/bootstrap.min.js',
-    'lib/lightbox/lightbox.min.js',
-    'lib/fileupload/jquery.ui.widget.js',
-    'lib/fileupload/jquery.iframe-transport.js',
-    'lib/fileupload/jquery.fileupload.js',
+    'node_modules/jquery/dist/jquery.js',
+    'node_modules/page.js',
+    'node_modules/alertifyjs/build/alertify.js',
+    'node_modules/bable-core/browser.js',
+    'node_modules/react/dist/react.js',
+    'node_modules/bootstrap/dist/js/bootstrap.js',
+    'node_modules/blueimp-bootstrap-image-gallery/js/bootstrap-image-gallery.js',
+    'node_modules/blueimp-file-upload/js/vendor/jquery.ui.widget.js',
+    'node_modules/blueimp-file-upload/js/jquery.iframe-transport.js',
+    'node_modules/blueimp-file-upload/js/jquery.fileupload.js',
+
     'js/ocfnet.js'
 )
 
 babel = Bundle()
 
 css = Bundle(
-    'lib/bootstrap/css/bootstrap-theme.min.css',
-     'lib/bootstrap/css/bootstrap.min.css',
-     'lib/lightbox/lightbox.css',
-     'lib/fileupload/jquery.fileupload.css',
+    'node_modules/alertifyjs/build/css/alertify.min.css',
+    'node_modules/bootstrap/dist/css/bootstrap-theme.min.css',
+    'node_modules/bootstrap/dist/css/bootstrap.min.css',
+    'node_modules/blueimp-bootstrap-image-gallery/css/lightbox.css',
+    'node_modules/blueimp-file-upload/css/jquery.fileupload.css',
+    
     'css/base.css'
 )
