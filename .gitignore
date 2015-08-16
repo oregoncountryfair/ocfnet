@@ -1,0 +1,7 @@
+*.pyc
+*.db
+config.py
+ocfnet/static/uploads
+*webassets-external
+*bundle.js
+*node_modules
