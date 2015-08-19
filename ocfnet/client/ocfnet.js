@@ -3,7 +3,7 @@ import React from 'react';
 import Router from 'react-router';
 import Modal from 'react-bootstrap';
 
-import './ui/navbar.js'
+import './ui/navbar.js';
 
 import Home from './pages/home.js';
 import LoginModal from './modals/login.js';
@@ -12,9 +12,8 @@ import LoginModal from './modals/login.js';
 var Route = Router.Route;
 var RouteHandler = Router.RouteHandler
 
-var modal_routes = [
-    '/login'
-]
+window.modal_instances = {}
+React.render(<LoginModal/>, document.getElementById('modals'));
 
 class App extends React.Component
 {
@@ -34,8 +33,10 @@ var page_router = Router.create({
     location: Router.HistoryLocation
 }); 
 page_router.run((Root) => {
-    var modal = modal_routes.indexOf(document.location.pathname);
-    React.render(<Root/>, document.getElementById(modal ? 'app' : 'modals'));
+    if (Object.keys(modal_instances).indexOf(document.location.pathname) !== -1) 
+        modal_instances[document.location.pathname].setState({ show: true });
+    else  
+        React.render(<Root/>, document.getElementById('app'));
 });
 
 document.body.addEventListener('click', (e) => {
