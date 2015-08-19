@@ -1,10 +1,10 @@
 import React from 'react';
 import {Modal, Button, Input} from 'react-bootstrap';
 
-var LoginModal = module.exports = React.createClass({
+var RegisterModal = module.exports = React.createClass({
 
     getInitialState() {
-        window.modal_instances['/login'] = this;
+        window.modal_instances['/register'] = this;
         return { show: false };
     },
 
@@ -15,7 +15,7 @@ var LoginModal = module.exports = React.createClass({
 
     close(noevent) {
         this.setState({ show: false });
-        if (!noevent)
+        if(!noevent)
             window.ee.emit('modal_close', this);
     },
 
@@ -24,20 +24,19 @@ var LoginModal = module.exports = React.createClass({
     },
 
     render() {
+        let close = e => this.setState({ show: false}); 
         return (   
             <Modal show={this.state.show} onHide={this.close}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Login</Modal.Title>
+                    <Modal.Title>Register</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <form>
-                        <Input type='email' label='Username or Email' placeholder='Enter email/username' />
+                        <Input type='text' label='Username' placeholder='Username' />
+                        <Input type='email' label='Email' placeholder='Email' />
                         <Input type='password' label='Password' />
+                        <Input type='password' label='Repeat Password' />
                     </form>
-                    <hr/>
-                    <div className="text-center">
-                        Register for free <a href="/register">here</a>.
-                    </div>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.close}>Close</Button>
