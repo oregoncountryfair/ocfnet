@@ -19,7 +19,7 @@ class Role(Model):
     def __init__(self, name):
         self.name = name
 
-    def __json__(self):
+    def to_json(self):
         return dict(id=self.id, name=self.name)
 
 user_role_pivot = Table('user_role_pivot', Model.metadata,
@@ -43,8 +43,8 @@ class User(Model):
     roles = relationship('Role', secondary=user_role_pivot, backref='users')
 
     def __init__(self, username, email, password):
-        self.username = username
-        self.email = email
+        self.username = username.lower()
+        self.email = email.lower()
         self.password = generate_password_hash(password=password,
                                                method='pbkdf2:sha512',
                                                salt_length=128)
@@ -67,9 +67,12 @@ class User(Model):
 
     @classmethod
     def get_user(cls, username_or_email):
-        return cls.query.filter(or_(User.username == username_or_email, 
-                                    User.email == username_or_email)).first()
-    def __json__(self):
+        return cls.query.filter(or_(cls.username == username_or_email, 
+                                    cls.email == username_or_email)).first()
+    @classmethod
+    def get_user_by_username(cls, username):
+        return cls.query.filter(cls.username == username).first()
+    def to_json(self):
         return dict(
             username=self.username,
             email=self.email,
