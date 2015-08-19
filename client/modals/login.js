@@ -4,11 +4,19 @@ import {Modal, Button, Input} from 'react-bootstrap';
 var LoginModal = module.exports = React.createClass({
 
     getInitialState() {
-        return { show: true };
+        window.modal_instances['/login'] = this;
+        return { show: false };
     },
 
-    close() {
+    open() {
+        this.setState({ show: true })
+        window.ee.emit('modal_open', this);
+    },
+
+    close(noevent) {
         this.setState({ show: false });
+        if (!noevent)
+            window.ee.emit('modal_close', this);
     },
 
     submit() {
@@ -16,10 +24,8 @@ var LoginModal = module.exports = React.createClass({
     },
 
     render() {
-        window.modal_instances['/login'] = this;
-        let close = e => this.setState({ show: false}); 
         return (   
-            <Modal show={this.state.show} onHide={close}>
+            <Modal show={this.state.show} onHide={this.close}>
                 <Modal.Header closeButton>
                     <Modal.Title>Login</Modal.Title>
                 </Modal.Header>
@@ -30,7 +36,7 @@ var LoginModal = module.exports = React.createClass({
                     </form>
                 </Modal.Body>
                 <Modal.Footer>
-                    //<Button onClick={close}>Close</Button>
+                    <Button onClick={this.close}>Close</Button>
                     <Button onClick={this.submit}>Submit</Button>
                 </Modal.Footer>
             </Modal>
