@@ -1,4 +1,5 @@
 import React from 'react';
+import xhttp from 'xhttp';
 import {Modal, Button, Input} from 'react-bootstrap';
 
 var RegisterModal = module.exports = React.createClass({
@@ -20,7 +21,22 @@ var RegisterModal = module.exports = React.createClass({
     },
 
     submit() {
+        var modal = this;
+        var data = {
+            username: document.querySelector('[name="username"]').value,
+            email: document.querySelector('[name="email"]').value,
+            password: document.querySelector('[name="password"]').value,
+            confirm: document.querySelector('[name="confirm"]').value
+        }
 
+        xhttp({
+            url: '/register',
+            method: 'post',
+            headers: {
+                'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content
+            },
+            data: data
+        })
     },
 
     render() {
@@ -32,10 +48,10 @@ var RegisterModal = module.exports = React.createClass({
                 </Modal.Header>
                 <Modal.Body>
                     <form>
-                        <Input type='text' label='Username' placeholder='Username' />
-                        <Input type='email' label='Email' placeholder='Email' />
-                        <Input type='password' label='Password' />
-                        <Input type='password' label='Repeat Password' />
+                        <Input type='text' label='Username' placeholder='Username' name='username' />
+                        <Input type='email' label='Email' placeholder='Email' name='email' />
+                        <Input type='password' label='Password' name='password' />
+                        <Input type='password' label='Repeat Password' name='confirm' />
                     </form>
                 </Modal.Body>
                 <Modal.Footer>
