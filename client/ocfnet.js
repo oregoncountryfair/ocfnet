@@ -27,8 +27,10 @@ ee.addListener('modal_close', (modal) => {
     open_modal = null;
 });   
 
+var current_layout;
+
 let render_app = (Page) => {
-    React.render((
+    current_layout = (
         <div id="app">
             <NavbarInstance/>
             <div className="container">
@@ -37,9 +39,17 @@ let render_app = (Page) => {
             <RegisterModal/>
             <LoginModal/>
         </div>
-    ), document.getElementById('entry'));
+    )
+    React.render(current_layout, document.getElementById('entry'));
 }
-
+ee.addListener('render', () => {
+    React.render(current_layout, document.getElementById('entry'));
+});
+ee.addListener('app_data', (data) => {
+    window.APP_DATA = data;
+    window.ui_navbar.setState(data);
+    ee.emit('render');
+})
 let routes = (
     <Route>
         <Route handler={Home} path="/home" />
@@ -95,7 +105,6 @@ ee.addListener('push_state:/logout', () => {
     })
 
     .then((data) => {
-        window.APP_DATA = data;
-        window.ui_navbar.setState(window.APP_DATA);
+        ee.emit('app_data', data);
     })
 });
