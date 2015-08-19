@@ -1,4 +1,5 @@
 import simplejson as json
+from flask import current_app as app, request
 from flask.json import dumps
 
 
@@ -14,6 +15,7 @@ def jsonify(*args, **kwargs):
     Returns a json response
     """
     data = None
+    indent = not request.is_xhr
     status = kwargs.pop('_status_code', 200)
     if args:
         data = args[0] if len(args) == 1 else args
@@ -24,6 +26,5 @@ def jsonify(*args, **kwargs):
             data.append(dict(**kwargs))
         else:
             data = dict(**kwargs)
-    return app.response_class(dumps(data,
-        indent=indent),
+    return app.response_class(dumps(data, indent=indent), status=status,
         mimetype='application/json')    
