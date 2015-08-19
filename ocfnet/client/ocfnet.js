@@ -22,10 +22,12 @@ class App extends React.Component
     }
 }
 
+class NoopRoute extends React.Component { render() { return null }}
+
 var page_routes = (
     <Route handler={App}>
-        <Route handler={Home} path="/" />
-        <Route handler={LoginModal} path="login" /> 
+        <Route handler={Home} path="/home" />
+        <Route handler={NoopRoute} path="login" /> 
     </Route>
 );
 var page_router = Router.create({
