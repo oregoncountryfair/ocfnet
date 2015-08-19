@@ -33,6 +33,6 @@ env.load_path = [
 env.register('css', css)
 
 @app.route('/<path:path>')
-def index(path):
+def index(path=None):
     """Main route for the single page app"""
     return render_template('index.html')
