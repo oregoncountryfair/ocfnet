@@ -7,13 +7,17 @@ import './ui/navbar.js';
 
 import Home from './pages/home.js';
 import LoginModal from './modals/login.js';
-
+import RegisterModal from './modals/register.js';
 
 var Route = Router.Route;
 var RouteHandler = Router.RouteHandler
 
 window.modal_instances = {}
-React.render(<LoginModal/>, document.getElementById('modals'));
+React.render(<div>
+    <RegisterModal/>,
+    <LoginModal/>
+</div>, document.getElementById('modals'));
+
 
 class App extends React.Component
 {
