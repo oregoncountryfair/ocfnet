@@ -43,31 +43,36 @@ class App extends React.Component
 
 class NoopRoute extends React.Component { render() { return null }}
 
-var page_routes = (
+var routes = (
     <Route handler={App}>
         <Route handler={Home} path="/home" />
-        <Route handler={NoopRoute} path="login" /> 
     </Route>
 );
-var page_router = Router.create({
-    routes: page_routes, 
+var router = window.router = Router.create({
+    routes: routes, 
     location: Router.HistoryLocation
 }); 
-page_router.run((Root) => {
-    if (Object.keys(modal_instances).indexOf(document.location.pathname) !== -1) 
-        modal_instances[document.location.pathname].setState({ show: true });
-    else  
-        React.render(<Root/>, document.getElementById('app'));
+router.run((Root) => {
+    React.render(<Root/>, document.getElementById('app'));
 });
 
 document.body.addEventListener('click', (e) => {
     if (e.target.pathname) {
         e.preventDefault();
         history.pushState({}, '', e.target.pathname);
+        if (Object.keys(modal_instances).indexOf(document.location.pathname) !== -1) {
+            modal_instances[document.location.pathname].open();
+            return;
+        }
         try {
-            page_router.refresh();
+            router.refresh();
         } catch (ex) {
             console.error(ex);
         }
     }
 });
+
+if (Object.keys(modal_instances).indexOf(document.location.pathname) !== -1) {
+    modal_instances[document.location.pathname].open();
+    React.render(<Home/>, document.getElementById('app'));
+}
