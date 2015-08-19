@@ -43,8 +43,12 @@ page_router.run((Root) => {
 
 document.body.addEventListener('click', (e) => {
     if (e.target.pathname) {
-        history.pushState({}, '', e.target.pathname);
-        page_router.refresh();
         e.preventDefault();
+        history.pushState({}, '', e.target.pathname);
+        try {
+            page_router.refresh();
+        } catch (ex) {
+            console.error(ex);
+        }
     }
 });
