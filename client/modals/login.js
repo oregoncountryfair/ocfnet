@@ -1,4 +1,5 @@
 import React from 'react';
+import xhttp from 'xhttp';
 import {Modal, Button, Input} from 'react-bootstrap';
 
 var LoginModal = module.exports = React.createClass({
@@ -20,7 +21,20 @@ var LoginModal = module.exports = React.createClass({
     },
 
     submit() {
+        var modal = this;
+        var data = {
+            username: document.querySelector('[name="username"]').value,
+            password: document.querySelector('[name="password"]').value,
+        }
 
+        xhttp({
+            url: '/login',
+            method: 'post',
+            headers: {
+                'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content
+            },
+            data: data
+        })
     },
 
     render() {
@@ -31,8 +45,8 @@ var LoginModal = module.exports = React.createClass({
                 </Modal.Header>
                 <Modal.Body>
                     <form>
-                        <Input type='email' label='Username or Email' placeholder='Enter email/username' />
-                        <Input type='password' label='Password' />
+                        <Input type='text' label='Username or Email' placeholder='Enter email/username' name='username' />
+                        <Input type='password' label='Password' name='password' />
                     </form>
                     <hr/>
                     <div className="text-center">
