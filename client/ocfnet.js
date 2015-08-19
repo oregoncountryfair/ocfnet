@@ -14,13 +14,13 @@ var RouteHandler = Router.RouteHandler
 var ee = window.ee = new EventEmitter();
 
 var open_modal = null;
-window.ee.addListener('modal_open', (modal) => {
+ee.addListener('modal_open', (modal) => {
     if (open_modal) {
         open_modal.close(true);
     }
     open_modal = modal;
 })
-window.ee.addListener('modal_close', (modal) => {
+ee.addListener('modal_close', (modal) => {
     if (history.length > 0)
         history.go(-1);
     else
@@ -28,27 +28,21 @@ window.ee.addListener('modal_close', (modal) => {
     open_modal = null;
 });   
 window.modal_instances = {}
-React.render(<div>
-    <RegisterModal/>,
-    <LoginModal/>
-</div>, document.getElementById('modals'));
-
-
-class App extends React.Component
-{
-    render() {
-        return (<RouteHandler/>)
-    }
-}
+React.render(
+    <div>
+        <RegisterModal/>,
+        <LoginModal/>
+    </div>
+, document.getElementById('modals'));
 
 class NoopRoute extends React.Component { render() { return null }}
 
 var routes = (
-    <Route handler={App}>
+    <Route>
         <Route handler={Home} path="/home" />
     </Route>
 );
-var router = window.router = Router.create({
+var router = Router.create({
     routes: routes, 
     location: Router.HistoryLocation
 }); 
