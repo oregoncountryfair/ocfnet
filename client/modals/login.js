@@ -5,7 +5,7 @@ import {Modal, Button, Input} from 'react-bootstrap';
 var LoginModal = module.exports = React.createClass({
 
     getInitialState() {
-        window.modal_instances['/login'] = this;
+        window.ee.addListener('push_state:/login', this.open);
         return { show: false };
     },
 

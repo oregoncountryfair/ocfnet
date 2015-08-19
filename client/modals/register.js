@@ -5,7 +5,7 @@ import {Modal, Button, Input} from 'react-bootstrap';
 var RegisterModal = module.exports = React.createClass({
 
     getInitialState() {
-        window.modal_instances['/register'] = this;
+        window.ee.addListener('push_state:/register', this.open);
         return { show: false };
     },
 
