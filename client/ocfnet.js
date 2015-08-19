@@ -11,7 +11,22 @@ import RegisterModal from './modals/register.js';
 
 var Route = Router.Route;
 var RouteHandler = Router.RouteHandler
+var ee = window.ee = new EventEmitter();
 
+var open_modal = null;
+window.ee.addListener('modal_open', (modal) => {
+    if (open_modal) {
+        open_modal.close(true);
+    }
+    open_modal = modal;
+})
+window.ee.addListener('modal_close', (modal) => {
+    if (history.length > 0)
+        history.go(-1);
+    else
+        history.pushState({}, '', '/home');
+    open_modal = null;
+});   
 window.modal_instances = {}
 React.render(<div>
     <RegisterModal/>,
