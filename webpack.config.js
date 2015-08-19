@@ -2,7 +2,7 @@
 
 module.exports = {
   entry: [
-    './ocfnet/client/ocfnet.js'
+    './client/ocfnet.js'
   ],
   output: {
     path: __dirname,
