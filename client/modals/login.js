@@ -35,6 +35,11 @@ var LoginModal = module.exports = React.createClass({
             },
             data: data
         })
+
+        .then((data) => {
+            window.ee.emit('app_data', data);
+            modal.close();
+        })
     },
 
     render() {
