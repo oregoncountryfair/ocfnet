@@ -22,10 +22,8 @@ ee.addListener('modal_open', (modal) => {
     open_modal = modal;
 })
 ee.addListener('modal_close', (modal) => {
-    if (history.length > 0)
-        history.go(-1);
-    else
-        history.pushState({}, '', '/home');
+    history.go(-1);
+    path_change(document.location.pathname);
     open_modal = null;
 });   
 
@@ -86,3 +84,18 @@ if (push_state(document.location.pathname)) {
         history.pushState({}, '', document.location.pathname); 
     render_app(Home);
 }
+
+ee.addListener('push_state:/logout', () => {
+    xhttp({
+        url: '/logout',
+        method: 'post',
+        headers: {
+            'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content
+        }
+    })
+
+    .then((data) => {
+        window.APP_DATA = data;
+        window.ui_navbar.setState(window.APP_DATA);
+    })
+});
