@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, render_template, session
 from flask.ext.assets import Environment
 from flask.ext.login import current_user
@@ -28,9 +30,10 @@ login_manager.init_app(app)
 
 # Assets bundles: js, jsx, css
 env = Environment(app)
+root = os.path.dirname(os.path.abspath(__file__)) + '/../'
 env.load_path = [
-    'node_modules',
-    'client/style'
+    root + 'node_modules',
+    root + 'client/style'
 ]
 env.register('css', css)
 
