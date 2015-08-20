@@ -2,12 +2,21 @@ import React from 'react';
 import { Nav, Navbar, NavItem, DropdownButton, MenuItem } 
   from 'react-bootstrap';
 
+import ee from './../Emitter.js';
 
-var NavbarInstance = module.exports = React.createClass({
-  getInitialState() {
-    window.ui_navbar = this;
-    return window.APP_DATA;
-  },
+
+export default class NavbarComponent extends React.Component
+{
+  constructor(props) {
+    super(props)
+    this.state = window.APP_DATA
+    ee.addListener('app_data', this.setData.bind(this));
+  }  
+
+  setData(data) {
+    this.setState(data);
+  }
+
   render() { 
     if (!this.state)
       this.getInitialState();
@@ -32,4 +41,4 @@ var NavbarInstance = module.exports = React.createClass({
       </Navbar>
     )
   }
-})
+}
