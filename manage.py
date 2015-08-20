@@ -3,8 +3,9 @@ from subprocess import call
 
 from flask.ext.script import Manager, Command
 
-from ocfnet import app
+from ocfnet import create_app
 
+app = create_app()
 
 manager = Manager(app)
 
