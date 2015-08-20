@@ -2,25 +2,15 @@ import React from 'react';
 import xhttp from 'xhttp';
 import {Modal, Button, Input} from 'react-bootstrap';
 
-import ee from './../ee.js';
+import ee from './../Emitter.js';
+import ModalComponent from './../ui/ModalComponent.js';
 
 
-export default class LoginModal extends React.Component
+export default class LoginModal extends ModalComponent
 {
     constructor(props) {
         super(props)
-        this.state = { show: false };
         ee.addListener('push_state:/login', this.open.bind(this));
-    }
-
-    open() {
-        this.setState({ show: true });
-        ee.emit('modal_open', this);
-    }
-
-    close(noevent) {
-        this.setState({ show: false });
-        ee.emit('modal_close', this);
     }
 
     submit() {
@@ -39,10 +29,17 @@ export default class LoginModal extends React.Component
             data: data
         })
 
-        .then((data) => {
-            ee.emit('app_data', data);
-            modal.close();
-        })
+        .then(this.onLoginSuccess.bind(this))
+
+        .catch(this.onLoginFailure.bind(this));
+    }
+
+    onLoginSuccess(data) {
+        ee.emit('update_app_data', data);
+        this.close();
+    }
+
+    onLoginFailure(data) {
     }
 
     render() {
