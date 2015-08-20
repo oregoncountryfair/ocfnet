@@ -1,5 +1,7 @@
 from flask import Flask, render_template, session
 from flask.ext.assets import Environment
+from flask.ext.login import current_user
+from flask.json import dumps
 from flask_wtf import CsrfProtect
 
 from ocfnet.assets import css
@@ -35,4 +37,10 @@ env.register('css', css)
 @app.route('/<path:path>')
 def index(path=None):
     """Main route for the single page app"""
-    return render_template('index.html')
+    data = dict(
+        authed=current_user.is_authenticated()
+    )
+    if current_user.is_authenticated():
+        data['username'] = str(current_user.username)
+    print dumps(data)
+    return render_template('index.html', app_data=dumps(data))
