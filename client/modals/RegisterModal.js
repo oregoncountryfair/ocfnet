@@ -1,6 +1,6 @@
 import React from 'react';
 import xhttp from 'xhttp';
-import {Modal, Button, Input} from 'react-bootstrap';
+import {Modal, Button, Input, Alert} from 'react-bootstrap';
 
 import ee from './../Emitter.js';
 
@@ -30,10 +30,31 @@ export default class RegisterModal extends ModalComponent
             },
             data: data
         })
+        .then(this.onRegisterSuccess.bind(this))
+        .catch(this.onRegisterFailure.bind(this));
+    }
+
+    onRegisterSuccess(data) {
+        ee.emit('update_app_data', data);
+        this.close();
+    }
+
+    onRegisterFailure(data) {
+        if (data) {
+            this.setState({ errors: data });
+        }
     }
 
     render() {
-        let close = e => this.setState({ show: false}); 
+        var errors = this.state.errors;
+        this.state.errors = null;
+        let get_error = (name) => {
+            if (errors && errors[name])
+                return (
+                    <Alert bsStyle='danger'>{errors[name]}</Alert>
+                )
+            return null;
+        }
         return (   
             <Modal show={this.state.show} onHide={this.close.bind(this)}>
                 <Modal.Header closeButton>
@@ -42,9 +63,13 @@ export default class RegisterModal extends ModalComponent
                 <Modal.Body>
                     <form>
                         <Input type='text' label='Username' placeholder='Username' name='username' />
+                        {get_error('username')}
                         <Input type='email' label='Email' placeholder='Email' name='email' />
+                         {get_error('email')}
                         <Input type='password' label='Password' name='password' />
+                         {get_error('password')}
                         <Input type='password' label='Repeat Password' name='confirm' />
+                         {get_error('confirm')}
                     </form>
                     <hr/>
                     <div className="text-center">
