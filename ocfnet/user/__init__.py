@@ -10,14 +10,19 @@ from ocfnet.util import jsonify
 user = Blueprint('user', __name__)
 
 login_manager = LoginManager()
+@login_manager.user_loader
+def load_user(userid):
+    return User.get(userid)
 
 @user.route('/register', methods=['POST'])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(form.username.data, form.email.data, form.password.data)
-        user.save()
-        return ''
+        new_user = User(form.username.data, form.email.data, form.password.data)
+        new_user.save()
+        if login_user(new_user):
+            return jsonify(authed=True, username=new_user.username)
+        return jsonify(authed=False)
     form.errors['_status_code'] = 400 
     return jsonify(**form.errors)
 
@@ -25,9 +30,13 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.get_user(form.username.data)
-        if user and user.check_password(form.password.data):
-            login_user(user)
+        form_user = User.get_user(form.username.data)
+        if form_user and form_user.check_password(form.password.data):
+            if login_user(form_user):
+                return jsonify(authed=True, username=form_user.username)
+            else:
+                return jsonify(username=['Your account is currently disabled.'], 
+                    _status_code=400)
         else:
             return jsonify(username=['Invalid username, email or password.'], 
                 _status_code=400)
@@ -38,4 +47,4 @@ def login():
 @user.route('/logout', methods=['POST'])
 def logout():
     logout_user()
-    return ''
+    return jsonify(authed=False)
