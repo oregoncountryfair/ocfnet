@@ -1,6 +1,6 @@
 import React from 'react';
 import xhttp from 'xhttp';
-import {Modal, Button, Input} from 'react-bootstrap';
+import {Modal, Button, Input, Alert} from 'react-bootstrap';
 
 import ee from './../Emitter.js';
 import ModalComponent from './../ui/ModalComponent.js';
@@ -40,9 +40,22 @@ export default class LoginModal extends ModalComponent
     }
 
     onLoginFailure(data) {
+        if (data) {
+            this.setState({ errors: data });
+            console.log(data, this.state)
+        }
     }
 
     render() {
+        var errors = this.state.errors;
+        this.state.errors = null;
+        let get_error = (name) => {
+            if (errors && errors[name])
+                return (
+                    <Alert bsStyle='danger'>{errors[name]}</Alert>
+                )
+            return null;
+        }
         return (   
             <Modal show={this.state.show} onHide={this.close.bind(this)}>
                 <Modal.Header closeButton>
@@ -51,7 +64,9 @@ export default class LoginModal extends ModalComponent
                 <Modal.Body>
                     <form>
                         <Input type='text' label='Username or Email' placeholder='Enter email/username' name='username' />
+                        {get_error('username')}
                         <Input type='password' label='Password' name='password' />
+                        {get_error('password')}
                     </form>
                     <hr/>
                     <div className="text-center">
