@@ -32,7 +32,7 @@ export default class NavbarComponent extends React.Component
       </Nav>
     )
     return (
-      <Navbar brand='OCF Intranet' inverse>
+      <Navbar brand='OCFnet' inverse>
         <Nav>
           <NavItem eventKey={1} href='/home'>Home</NavItem>
           <NavItem eventKey={2} href='/media'>Media</NavItem>
