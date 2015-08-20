@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from flask import current_app
 from sqlalchemy import Column, DateTime, Integer, String, Boolean, \
     ForeignKey, Table, or_
 from sqlalchemy.orm import relationship, backref
@@ -54,7 +55,11 @@ class User(Model):
         return check_password_hash(self.password, password)
 
     def is_active(self):
-        return self.verified and self.enabled
+        if current_app.config['USER_MUST_BE_ENABLED'] and not self.enabled:
+            return False
+        if current_app.config['USER_MUST_BE_VERIFIED'] and not self.verified:
+            return False
+        return True
 
     def is_anonymous(self):
         return False
