@@ -7,14 +7,14 @@ from ocfnet.user.models import User
 from ocfnet.util import jsonify
 
 
-user = Blueprint('user', __name__)
+user_bp = Blueprint('user_bp', __name__)
 
 login_manager = LoginManager()
 @login_manager.user_loader
 def load_user(userid):
     return User.get(userid)
 
-@user.route('/register', methods=['POST'])
+@user_bp.route('/register', methods=['POST'])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -26,7 +26,7 @@ def register():
     form.errors['_status_code'] = 400 
     return jsonify(**form.errors)
 
-@user.route('/login', methods=['POST'])
+@user_bp.route('/login', methods=['POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -44,7 +44,7 @@ def login():
     form.errors['_status_code'] = 400 
     return jsonify(**form.errors)
 
-@user.route('/logout', methods=['POST'])
+@user_bp.route('/logout', methods=['POST'])
 def logout():
     logout_user()
     return jsonify(authed=False)
