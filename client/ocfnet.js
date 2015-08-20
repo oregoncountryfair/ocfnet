@@ -1,39 +1,25 @@
 import React from 'react';
-import Router from 'react-router';
+import Router, {Route, RouteHandler} from 'react-router';
 import Modal from 'react-bootstrap';
 import xhttp from 'xhttp';
 
-import ee from './ee.js';
+import ee from './Emitter.js';
 
-import NavbarInstance from  './ui/navbar.js';
+import NavbarComponent from  './ui/NavbarComponent.js';
 
-import Home from './pages/home.js';
-import LoginModal from './modals/login.js';
-import RegisterModal from './modals/register.js';
+import HomePage from './pages/HomePage.js';
+import MediaPage from './pages/MediaPage.js';
 
-var Route = Router.Route;
-var RouteHandler = Router.RouteHandler
-var ee = window.ee = new EventEmitter();
+import LoginModal from './modals/LoginModal.js';
+import RegisterModal from './modals/RegisterModal.js';
 
-var open_modal = null;
-ee.addListener('modal_open', (modal) => {
-    if (open_modal) {
-        open_modal.close(true);
-    }
-    open_modal = modal;
-})
-ee.addListener('modal_close', (modal) => {
-    history.go(-1);
-    path_change(document.location.pathname);
-    open_modal = null;
-});   
 
 var current_layout;
 
 let render_app = (Page) => {
     current_layout = (
         <div id="app">
-            <NavbarInstance/>
+            <NavbarComponent/>
             <div className="container">
                 <Page/>
             </div>
@@ -43,17 +29,21 @@ let render_app = (Page) => {
     )
     React.render(current_layout, document.getElementById('entry'));
 }
-ee.addListener('render', () => {
+let rerender_app = () => {
     React.render(current_layout, document.getElementById('entry'));
-});
-ee.addListener('app_data', (data) => {
+}
+ee.addListener('render', rerender_app);
+
+ee.addListener('update_app_data', (data) => {
     window.APP_DATA = data;
-    window.ui_navbar.setState(data);
+    ee.emit('app_data', data);
     ee.emit('render');
 })
+
 let routes = (
     <Route>
-        <Route handler={Home} path="/home" />
+        <Route handler={HomePage} path="/home" />
+        <Route handler={MediaPage} path="/media" />
     </Route>
 );
 let router = Router.create({
@@ -62,38 +52,53 @@ let router = Router.create({
 }); 
 router.run((Root) => { render_app(Root); });
 
-let push_state = (path) => {
+let emit_push_state = (path) => {
     return ee.emit('push_state:' + path);
 }
 
+var last_page = '/home';
+const opened_modal = 1;
+const rendered_page = 2;
 let path_change = (path) => {
-    if (push_state(path))
-        return;
+    if (emit_push_state(path))
+        return opened_modal;
+    last_page = path;
     try {
+        ee.emit('close_open_modal');
         router.refresh();
     } catch (ex) {
         console.error(ex);
     }
+    return rendered_page;
 }
+
+ee.addListener('modal_close', (modal) => {
+    history.pushState({}, '', last_page);
+    path_change(last_page);
+});   
 
 var no_push_state = [
     '/logout'
-]
+];
 
 document.body.addEventListener('click', (e) => {
     if (e.target.pathname) {
         e.preventDefault();
-        if (no_push_state.indexOf(e.target.pathname) == -1)
+        if (e.target.href === '#')
+            return;
+        if (no_push_state.indexOf(e.target.pathname) == -1) {
             history.pushState({}, '', e.target.pathname);
+        }
         path_change(e.target.pathname);
     }
 });
 
-if (push_state(document.location.pathname)) {
-    history.replaceState({}, '', '/home');
-    if (open_modal)
-        history.pushState({}, '', document.location.pathname); 
-    render_app(Home);
+window.onpopstate = function() {
+    if(path_change(document.location.pathname) == opened_modal)
+        rerender_app();
+}
+if (emit_push_state(document.location.pathname)) {
+    render_app(HomePage);
 }
 
 ee.addListener('push_state:/logout', () => {
@@ -104,8 +109,7 @@ ee.addListener('push_state:/logout', () => {
             'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content
         }
     })
-
     .then((data) => {
-        ee.emit('app_data', data);
+        ee.emit('update_app_data', data);
     })
 });
