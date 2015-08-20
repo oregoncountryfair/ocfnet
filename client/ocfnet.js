@@ -42,6 +42,7 @@ ee.addListener('update_app_data', (data) => {
 
 let routes = (
     <Route>
+        <Route handler={HomePage} path="/" />
         <Route handler={HomePage} path="/home" />
         <Route handler={MediaPage} path="/media" />
     </Route>
