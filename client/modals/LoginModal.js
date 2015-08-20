@@ -46,6 +46,11 @@ export default class LoginModal extends ModalComponent
         }
     }
 
+    onKeyDown(e) {
+        if (e.keyCode == 13)
+            this.submit()
+    }
+    
     render() {
         var errors = this.state.errors;
         this.state.errors = null;
@@ -63,7 +68,7 @@ export default class LoginModal extends ModalComponent
                 </Modal.Header>
                 <Modal.Body>
                     <form>
-                        <Input type='text' label='Username or Email' placeholder='Enter email/username' name='username' />
+                        <Input type='text' label='Username or Email' placeholder='Enter email/username' name='username' onKeyDown={this.onKeyDown.bind(this)} />
                         {get_error('username')}
                         <Input type='password' label='Password' name='password' />
                         {get_error('password')}

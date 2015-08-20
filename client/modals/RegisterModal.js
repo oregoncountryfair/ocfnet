@@ -45,6 +45,11 @@ export default class RegisterModal extends ModalComponent
         }
     }
 
+    onKeyDown(e) {
+        if (e.keyCode == 13)
+            this.submit()
+    }
+    
     render() {
         var errors = this.state.errors;
         this.state.errors = null;
@@ -62,13 +67,13 @@ export default class RegisterModal extends ModalComponent
                 </Modal.Header>
                 <Modal.Body>
                     <form>
-                        <Input type='text' label='Username' placeholder='Username' name='username' />
+                        <Input type='text' label='Username' placeholder='Username' name='username' onKeyDown={this.onKeyDown.bind(this)} />
                         {get_error('username')}
-                        <Input type='email' label='Email' placeholder='Email' name='email' />
+                        <Input type='email' label='Email' placeholder='Email' name='email' onKeyDown={this.onKeyDown.bind(this)} />
                          {get_error('email')}
-                        <Input type='password' label='Password' name='password' />
+                        <Input type='password' label='Password' name='password' onKeyDown={this.onKeyDown.bind(this)} />
                          {get_error('password')}
-                        <Input type='password' label='Repeat Password' name='confirm' />
+                        <Input type='password' label='Repeat Password' name='confirm' onKeyDown={this.onKeyDown.bind(this)} />
                          {get_error('confirm')}
                     </form>
                     <hr/>
