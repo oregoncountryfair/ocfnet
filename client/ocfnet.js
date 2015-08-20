@@ -1,8 +1,9 @@
-import EventEmitter from 'events';
 import React from 'react';
 import Router from 'react-router';
 import Modal from 'react-bootstrap';
 import xhttp from 'xhttp';
+
+import ee from './ee.js';
 
 import NavbarInstance from  './ui/navbar.js';
 
