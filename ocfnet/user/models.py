@@ -77,6 +77,11 @@ class User(Model):
     @classmethod
     def get_user_by_username(cls, username):
         return cls.query.filter(cls.username == username).first()
+
+    @classmethod
+    def get_user_by_email(cls, email):
+        return cls.query.filter(cls.email == email).first()
+
     def to_json(self):
         return dict(
             username=self.username,
