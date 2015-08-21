@@ -6,6 +6,7 @@ from flask.ext.login import current_user
 from flask.json import dumps
 from flask_wtf import CsrfProtect
 
+from ocfnet import database
 from ocfnet.assets import css
 from ocfnet.user import login_manager, user_bp
 from ocfnet.user.forms import LoginForm, RegistrationForm
@@ -38,6 +39,10 @@ def create_app(testing=False):
         root + 'client/style'
     ]
     env.register('css', css)
+
+    @app.teardown_appcontext
+    def shutdown_session(response):
+        database.session.remove()
 
     @app.route('/')
     @app.route('/<path:path>')
