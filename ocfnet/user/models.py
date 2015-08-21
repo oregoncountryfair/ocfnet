@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from flask import current_app
-from sqlalchemy import Column, DateTime, Integer, String, Boolean, \
+from sqlalchemy import Column, DateTime, Integer, String, Boolean, Text, \
     ForeignKey, Table, or_
 from sqlalchemy.orm import relationship, backref
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -35,7 +35,7 @@ class User(Model):
     id = Column(Integer, primary_key=True)
     username = Column(String(255), nullable=False, unique=True)
     email = Column(String(255), unique=True)
-    password = Column(String(255), nullable=False)
+    password = Column(Text, nullable=False)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     updated_at = Column(DateTime)
     verified = Column(Boolean, default=False)
