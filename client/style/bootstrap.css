@@ -1,0 +1,27 @@
+nav.navbar {
+    background: url('/static/image/navbar.png');
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+}
+.dropdown-menu {
+    background: url('/static/image/navbar.png')!important;
+}
+nav a,
+.navbar-brand {
+    color: #FEFFDB!important;
+    font-weight: bold!important;
+    font-size: 19px!important;
+    text-shadow: -1.5px -1.5px #796152!important;
+}
+nav .open > a,
+nav a:focus, 
+nav a:hover {
+    background: #EE5806 none repeat scroll 0% 0%!important;
+}
+nav .glyphicon-user {
+    font-size: 17px;
+    vertical-align: middle;
+    margin-right: 5px;
+}

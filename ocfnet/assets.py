@@ -5,5 +5,6 @@ css = Bundle(
     'bootstrap/dist/css/bootstrap-theme.min.css',
     'bootstrap/dist/css/bootstrap.min.css',
 
-    'base.css'
+    'base.css',
+    'bootstrap.css'
 )
