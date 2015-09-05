@@ -5,7 +5,7 @@ import xhttp from 'xhttp';
 
 import ee from './Emitter.js';
 
-import NavbarComponent from  './ui/NavbarComponent.js';
+import NavbarComponent from  './components/NavbarComponent.js';
 
 import HomePage from './pages/HomePage.js';
 import MediaPage from './pages/MediaPage.js';
