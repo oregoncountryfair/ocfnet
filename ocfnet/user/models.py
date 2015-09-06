@@ -86,5 +86,5 @@ class User(Model):
         return dict(
             username=self.username,
             email=self.email,
-            created=self.created.strftime('%m/%d/%Y %H:%M:%S'),
+            created_at=self.created_at.strftime('%m/%d/%Y %H:%M:%S'),
             roles=[role.__json__() for role in self.roles])
