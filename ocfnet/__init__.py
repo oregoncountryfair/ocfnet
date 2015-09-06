@@ -8,8 +8,10 @@ from flask_wtf import CsrfProtect
 
 from ocfnet import database
 from ocfnet.assets import css
-from ocfnet.user import login_manager, user_bp
+from ocfnet.user import login_manager, user_bp,  anonymous_user_data
 from ocfnet.user.forms import LoginForm, RegistrationForm
+from ocfnet.util import ExtensibleJSONEncoder
+
 
 def create_app(testing=False):
     app = Flask(__name__)
@@ -22,6 +24,7 @@ def create_app(testing=False):
         app.config['TESTING'] = True
         app.config['WTF_CSRF_ENABLED'] = False
 
+    app.json_encoder = ExtensibleJSONEncoder
     app.secret_key = app.config['SECRET_KEY']
     app.register_blueprint(user_bp)
 
@@ -49,11 +52,11 @@ def create_app(testing=False):
     def index(path=None):
         """Main route for the single page app"""
         data = dict(
-            authed=current_user.is_authenticated()
+            user=anonymous_user_data,
+            alerts=[]
         )
         if current_user.is_authenticated():
-            data['username'] = str(current_user.username)
-        print dumps(data)
+            data['user'] = current_user
         return render_template('index.html', app_data=dumps(data))
 
     return app

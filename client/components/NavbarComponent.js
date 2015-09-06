@@ -9,22 +9,19 @@ export default class NavbarComponent extends React.Component
 {
   constructor(props) {
     super(props)
-    this.state = window.APP_DATA
-    ee.addListener('app_data', this.setData.bind(this));
+    this.url_navbar_map = {
+      '/': 'home',
+      '/home': 'home',
+      '/media': 'media'
+    }
   }  
 
-  setData(data) {
-    this.setState(data);
-  }
-
   render() { 
-    if (!this.state)
-      this.getInitialState();
-    if (this.state.authed) {
+    if (this.props.user.username) {
       var userNameAndIcon = (
         <span>
           <span className="glyphicon glyphicon-user"></span>
-          <span>{this.state.username}</span>
+          <span>{this.props.user.username}</span>
         </span>
       );
       var userNav = (
@@ -36,7 +33,7 @@ export default class NavbarComponent extends React.Component
       var userNav = (<NavItem eventKey={1} href='/login'>Login</NavItem>);
     }
     return (
-      <Navbar brand='OCFnet' inverse>
+      <Navbar brand='OCFnet' inverse fixedTop>
         <Nav>
           <NavItem eventKey={1} href='/home'>Home</NavItem>
           <NavItem eventKey={2} href='/media'>Media</NavItem>
